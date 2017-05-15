@@ -1,0 +1,63 @@
+//webpack.config.js
+
+var path=require('path');
+var webpack=require("webpack");
+var HtmlWebpackPlugin = require('html-webpack-plugin'); 
+// var publicPath=require('publicPath');
+module.exports={
+   entry:{
+       main:'./src/script/main.js',
+       a:'./src/script/a.js',
+       b:'./src/script/b.js',
+       c:'./src/script/c.js'   
+   },
+   output:{
+       path:path.resolve(__dirname,'dist'),
+       filename:'js/[name]-[chunkhash].js',  //声称哈希值
+       publicPath:'/kobe/'             //占位符（需要上线）
+   },
+   plugins:[
+        //这样就会让我们生成一个html页面
+        new HtmlWebpackPlugin({
+            filename:'a.html',  //再生成一个hash HTML
+            template:'index.html',
+            inject:false ,             //指定脚本存放的位置    不会自动将chunks值插到script标签中去
+            // inject:'body' ,             //指向body
+            title:'this is a.html',
+            chunks:['a','main'],      //传入指定的js文件
+            // excludeChunks:['a']       //除了这个以外其他的全部加载进来
+            // data:new Date(),
+            // minify: {         //对需要上线的文件进行压缩
+            //        removeComments:true,  //删除注释
+            //        collapseWhitespace:true     //删除空格 
+            // }
+        }),
+        //生成多个html文件
+        new HtmlWebpackPlugin({
+            filename:'b.html',  //再生成一个hash HTML
+            template:'index.html',
+            inject:false ,             //指定脚本存放的位置
+            // inject:'body' ,             //指向body
+            title:'this is b.html',
+            chunks:['b','main']  ,        //给当前的html指定js文件
+            //  excludeChunks:['b']       //除了这个以外其他的全部加载进来
+            // minify: {         //对需要上线的文件进行压缩
+            //        removeComments:true,  //删除注释
+            //        collapseWhitespace:true     //删除空格 
+            // }
+        }),
+     new HtmlWebpackPlugin({
+            filename:'c.html',  //再生成一个hash HTML
+            template:'index.html',
+            inject:false ,             //指定脚本存放的位置
+            // inject:'body' ,             //指向body
+            title:'this is c.html',
+            chunks:['main','c']
+            //  excludeChunks:['c']       //除了这个以外其他的全部加载进来
+            // minify: {         //对需要上线的文件进行压缩
+            //        removeComments:true,  //删除注释
+            //        collapseWhitespace:true     //删除空格 
+            // }
+        }),
+   ]
+}
